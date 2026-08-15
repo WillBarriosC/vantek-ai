@@ -1,0 +1,15 @@
+# Site Settings
+# Edit this file in Git.
+name: "Vantek AI"
+description: "Vantek AI & Vantek Engine"
+url: "https://astro-cloudflare-starter.pages.dev"
+defaultLocale: en
+analyticsProvider: none
+gtmId: ""
+umamiUrl: ""
+umamiId: ""
+mapLatitude: "-7.4941954"
+mapLongitude: "110.8065028"
+orgName: ""
+orgEmail: ""
+socialLinks: []

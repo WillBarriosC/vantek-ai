@@ -1,0 +1,224 @@
+---
+import Button from "@/components/ui/form/Button/Button.astro";
+import Input from "@/components/ui/form/Input/Input.astro";
+import Textarea from "@/components/ui/form/Textarea/Textarea.astro";
+import { Select } from "@/components/ui";
+import Checkbox from "../ui/form/Checkbox/Checkbox.astro";
+import { t } from "@/i18n/ui";
+import type { Locale } from "@/lib/site-config";
+import { createLeadFormToken } from "@/lib/forms/lead-form";
+
+export interface Props {
+  locale?: Locale;
+}
+
+const props = Astro.props as Props;
+const locale = props.locale ?? "en";
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
+const formToken = createLeadFormToken();
+const formAction = "/api/leads";
+---
+
+<form
+  id="lead-form"
+  method="post"
+  action={formAction}
+  autocomplete="off"
+  class="mx-auto flex flex-col rounded-lg border border-neutral-200 bg-neutral-50 p-6 text-start dark:border-neutral-800 dark:bg-neutral-900"
+>
+  <input type="hidden" name="website" value="" />
+  <input type="hidden" name="formToken" value={formToken} />
+
+  <Input
+    id="name"
+    type="text"
+    class="mb-4"
+    placeholder="Vantek AI"
+    name="name"
+    label="Nombre completo"
+    required
+  />
+
+  <Input
+    id="empresa"
+    type="text"
+    class="mb-4"
+    placeholder="Vantek AI"
+    name="empresa"
+    label="Empresa"
+    required
+  />
+
+  <Input
+    id="cargo"
+    type="text"
+    class="mb-4"
+    placeholder="Gerente"
+    name="cargo"
+    label="Cargo"
+    required
+  />
+
+  <Input
+    id="email"
+    type="email"
+    class="mb-4"
+    placeholder="vantek-ai@example.com"
+    name="email"
+    label="Correo electrónico"
+    required
+  />
+
+  <Input
+    id="telefono"
+    type="tel"
+    class="mb-4"
+    placeholder="+57 300 1234567"
+    name="telefono"
+    label="Teléfono / WhatsApp"
+    required
+  />
+
+  <Select
+    id="interest"
+    class="mb-4"
+    name="interest"
+    label="¿Cuántos leads B2B reciben al mes?"
+    options={[
+      { value: "0-20", label: "0-20" },
+      { value: "21-50", label: "21-50" },
+      { value: "51-100", label: "51-100" },
+      { value: "+100", label: "Más de 100" },
+    ]}
+  />
+
+  <Textarea
+    id="message"
+    class="mb-4"
+    name="message"
+    label="Mensaje"
+    placeholder="Cuéntanos tus necesidades."
+    required
+    rows={5}
+  />
+
+  <Checkbox
+    id="privacy"
+    name="privacy"
+    label={t(locale, "acceptance.privacy")}
+    checked={false}
+    required
+  />
+
+  <div class="mt-4">
+    {
+      siteKey && (
+        <div
+          class="cf-turnstile"
+          data-sitekey={siteKey}
+          data-action="lead_form"
+          data-theme="auto"
+          data-appearance="interaction-only"
+        />
+      )
+    }
+  </div>
+
+  <div id="form-status" class="text-sm" aria-live="polite"></div>
+
+  <Button type="submit" class="mt-4" variant="primary">
+    Agendar mi Auditoría de $1,200 USD
+  </Button>
+</form>
+
+<div
+  id="success-modal"
+  class="fixed inset-0 z-100 hidden items-center justify-center bg-black/55 px-4 backdrop-blur-sm"
+  aria-hidden="true"
+>
+  <div
+    class="w-full max-w-md rounded-2xl border border-neutral-200 bg-white p-8 text-center shadow-2xl dark:border-neutral-800 dark:bg-neutral-900"
+  >
+    <div
+      class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-3xl text-emerald-600 dark:bg-emerald-950 dark:text-emerald-400"
+    >
+      ✓
+    </div>
+    <h3 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+      ¡Gracias!
+    </h3>
+    <p class="mt-3 text-sm leading-6 text-neutral-600 dark:text-neutral-400">
+      Tu mensaje fue enviado correctamente. Te responderemos pronto.
+    </p>
+
+    <Button href="/" class="mt-5" variant="primary"> Volver al inicio </Button>
+  </div>
+</div>
+
+<script is:inline>
+  const form = document.getElementById("lead-form");
+  const statusElement = document.getElementById("form-status");
+  const modal = document.getElementById("success-modal");
+
+  const showSuccessModal = () => {
+    modal?.classList.remove("hidden");
+    modal?.classList.add("flex");
+    modal?.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  };
+
+  if (form && statusElement) {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const submitButton = form.querySelector('button[type="submit"]');
+      const originalLabel = submitButton?.textContent ?? "";
+
+      setLoading(true);
+      clearStatus();
+
+      try {
+        const formData = new FormData(form);
+        const response = await fetch("/api/leads", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await response.json().catch(() => ({}));
+
+        if (response.ok && data.ok) {
+          form.reset();
+          showSuccessModal();
+        } else {
+          showError(data.error || "No se pudo procesar la solicitud.");
+        }
+      } catch {
+        showError("No se pudo enviar el formulario. Inténtalo de nuevo.");
+      } finally {
+        setLoading(false);
+      }
+
+      function setLoading(isLoading) {
+        if (submitButton) {
+          submitButton.disabled = isLoading;
+          submitButton.textContent = isLoading ? "Enviando..." : originalLabel;
+        }
+      }
+
+      function clearStatus() {
+        statusElement.textContent = "";
+        statusElement.className = "mt-4 text-sm";
+      }
+
+      function showError(message) {
+        statusElement.textContent = message;
+        statusElement.className = "mt-4 text-sm text-red-600";
+      }
+    });
+  }
+</script>
+
+<script
+  is:inline
+  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+  async
+  defer></script>

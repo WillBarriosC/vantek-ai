@@ -1,0 +1,158 @@
+---
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+import Hero from "../components/Hero.astro";
+import FAQ from "../components/FAQ.astro";
+import CTA from "../components/CTA.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import {
+  FeatureTabs,
+  StackMarquee,
+  Credibility,
+  LighthouseScores,
+} from "../components/landing/index";
+import { t } from "../i18n/ui";
+import Form from "@/components/landing/Form.astro";
+
+const stackEntries = (await getCollection("stack"))
+  .sort(
+    (a: CollectionEntry<"stack">, b: CollectionEntry<"stack">) =>
+      a.data.order - b.data.order,
+  )
+  .map((entry: CollectionEntry<"stack">) => entry.data);
+
+const locale = (Astro.currentLocale || "en") as "en";
+const tabs = [
+  {
+    id: "lead-response-time",
+    icon: "zap",
+    heading: "Lead Response Time",
+    description: "De horas/días a menos de 5 minutos.",
+    points: [],
+    visual:
+      "→ Lead entrante: 14:32\n> Cualificando... ICP ✓ | Presupuesto ✓ | Autoridad ✓\n→ Reunión agendada: 14:36",
+  },
+  {
+    id: "sql-rate",
+    icon: "pen-line",
+    heading: "SQL Rate",
+    description: "+35% en conversión de lead a reunión calificada.",
+    points: [],
+    visual:
+      "→ Lead entrante: 14:32\n> Cualificando... ICP ✓ | Presupuesto ✓ | Autoridad ✓\n→ Reunión agendada: 14:36",
+  },
+  {
+    id: "sales-cycle-length",
+    icon: "trending-up",
+    heading: "Sales Cycle Length",
+    description:
+      "40–50% menos tiempo de tus ingenieros de ventas en cualificación básica.",
+    points: [],
+    visual:
+      "→ Lead entrante: 14:32\n> Cualificando... ICP ✓ | Presupuesto ✓ | Autoridad ✓\n→ Reunión agendada: 14:36",
+  },
+];
+---
+
+<MarketingLayout
+  title={t(locale, "nav.home")}
+  description="Vantek AI"
+  locale={locale}
+  path="/"
+>
+  <Hero
+    variant="centered"
+    eyebrow="Automatización comercial B2B"
+    headline={t(locale, "hero.title")}
+    subheadline={t(locale, "hero.subtitle")}
+    primaryCta={{ label: t(locale, "hero.cta"), href: "#form" }}
+    secondaryCta={{ label: "Ver cómo funciona", href: "#como-lo-hacemos" }}
+    locale={locale}
+  />
+
+  <section class="container py-10">
+    <header class="section-head">
+      <p class="section-head__eyebrow">Why this stack</p>
+      <h2 class="section-head__title">Built for performance and scale</h2>
+      <p class="section-head__lead">
+        Everything you need to ship a fast marketing site.
+      </p>
+    </header>
+    <FeatureTabs client:visible tabs={tabs} />
+  </section>
+
+  <section id="como-lo-hacemos" class="container py-16">
+    <header class="section-head">
+      <h2 class="section-head__title">Como lo hacemos</h2>
+    </header>
+    <StackMarquee items={stackEntries} />
+  </section>
+
+  <section class="container py-16">
+    <Credibility
+      stats={[
+        { value: "15 días", label: "Entrega del Hito 1" },
+        { value: "90 min", label: "Tu tiempo total invertido" },
+        { value: "95%", label: "Carga técnica absorbida por nuestro equipo" },
+      ]}
+    />
+  </section>
+
+  <section class="container py-16">
+    <header class="section-head">
+      <h2 class="section-head__title">
+        Garantía de Valor Mínimo y Cero Riesgo — $1,200 USD
+      </h2>
+      <p class="section-head__lead">
+        Si en 15 días calendario, durante la demo del prototipo, no
+        identificamos al menos un cuello de botella comercial que te cueste
+        mínimo $5,000 USD anuales, te devolvemos el 100% de tu inversión. Sin
+        preguntas. Y conservas el Blueprint documentado.
+      </p>
+    </header>
+    <LighthouseScores />
+  </section>
+
+  <FAQ
+    title="¿Tienes preguntas antes de empezar?"
+    items={[
+      {
+        question:
+          "¿Qué necesito entregar para que el agente aprenda mi proceso?",
+        answer:
+          "Manuales, grabaciones de llamadas, cotizaciones pasadas, PDFs técnicos.",
+      },
+      {
+        question: "¿Cuánto tiempo me toma a mí como director/dueño?",
+        answer: "90 minutos en total, en 2 sesiones.",
+      },
+      {
+        question: "¿Qué pasa si no funciona?",
+        answer: "Se activa la garantía de reembolso del 100%",
+      },
+      {
+        question: "¿Puedo integrarlo con mi CRM después?",
+        answer:
+          "Sí, con 20% de descuento si decides expandir dentro de los primeros 20 días.",
+      },
+    ]}
+  />
+
+  <CTA
+    eyebrow="Empieza ya"
+    title="Cupos limitados: 3 empresas B2B por mes"
+    content="Para garantizar acompañamiento senior directo, solo abrimos espacio para 3 empresas por mes en la cohorte actual. Si decides expandir el sistema (CRM, inventario, enrutamiento) dentro de los primeros 20 días tras el Hito 1, obtienes 20% de descuento directo."
+    ctaText="Quiero mi cupo"
+    ctaHref="#form"
+    locale={locale}
+  />
+
+  <section id="form" class="container py-16">
+    <header class="section-head">
+      <h2 class="section-head__title">Formulario de contacto</h2>
+      <p class="section-head__lead pb-10">
+        Completa el formulario y nos pondremos en contacto contigo.
+      </p>
+      <Form />
+    </header>
+  </section>
+</MarketingLayout>

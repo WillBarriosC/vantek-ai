@@ -1,0 +1,23 @@
+# Node
+node_modules/
+.cache/
+.nyc_output/
+.DS_Store
+.env*
+!.env.example
+.dev.vars
+.agent-skills.lock.md
+
+# Build artifacts
+dist/
+build/
+.astro/
+.cache
+
+# OS
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+.history
