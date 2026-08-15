@@ -4,18 +4,18 @@
   "private": true,
   "description": "Vantek AI & Vantek Engine",
   "license": "MIT",
-  "packageManager": "pnpm@8.15.0",
+  "packageManager": "pnpm@8.15.9",
   "type": "module",
   "engines": {
-    "node": "24.0.0",
-    "pnpm": "8.15.0"
+    "node": "24.x",
+    "pnpm": "8.x"
   },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "sync": "astro sycn",
+    "sync": "astro sync",
     "lint": "pnpm run lint:js && pnpm run lint:css && pnpm run type-check && pnpm run check:kpis && pnpm run validate:i18n && pnpm run validate:secrets",
     "lint:js": "eslint . --ignore-pattern dist --ignore-pattern .astro --ignore-pattern .wrangler --ignore-pattern node_modules",
     "lint:css": "stylelint src/styles/",
