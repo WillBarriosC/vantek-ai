@@ -409,7 +409,6 @@ code {
   line-height: 1.65;
 }
 
-/* ─── Feature tabs (landing section, React island) ─── */
 .feature-tabs {
   display: grid;
   gap: var(--spacing-7);

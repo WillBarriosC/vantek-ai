@@ -2,7 +2,6 @@ import { defineConfig, envField } from "astro/config";
 import starlight from "@astrojs/starlight";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
-import react from "@astrojs/react";
 import mdx from "@astrojs/mdx";
 import icon from "astro-icon";
 import { readdir, readFile } from "node:fs/promises";
@@ -111,7 +110,7 @@ function contentValidationIntegration() {
 
 export default defineConfig({
   site: siteConfig.url,
-  trailingSlash: 'always',
+  trailingSlash: "always",
 
   i18n: {
     defaultLocale: "en",
@@ -200,7 +199,6 @@ export default defineConfig({
         },
       },
     }),
-    react(),
     icon(),
   ],
 
