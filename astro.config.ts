@@ -10,7 +10,10 @@ import { join, extname, basename } from "node:path";
 import { siteConfig } from "./src/config/site.config";
 import vercel from "@astrojs/vercel";
 
-async function collectFiles(dir: string, extensions: string[]): Promise<string[]> {
+async function collectFiles(
+  dir: string,
+  extensions: string[],
+): Promise<string[]> {
   const results: string[] = [];
   const entries = await readdir(dir, { withFileTypes: true });
 
@@ -41,7 +44,10 @@ function parseFrontmatter(source: string) {
   }, {});
 }
 
-function validateDuplicates(entries: Array<{ id: string; data?: { uid?: string; locale?: string } }>, supportedLocales: string[]) {
+function validateDuplicates(
+  entries: Array<{ id: string; data?: { uid?: string; locale?: string } }>,
+  supportedLocales: string[],
+) {
   const seenIds = new Set<string>();
   const seenUids = new Map<string, string>();
 
@@ -127,10 +133,15 @@ export default defineConfig({
         SiteTitle: "./src/components/docs/SiteTitle.astro",
       },
       editLink: {
-        baseUrl: "https://github.com/milzamsz/astro-cloudflare-starter/edit/main",
+        baseUrl:
+          "https://github.com/milzamsz/astro-cloudflare-starter/edit/main",
       },
       social: [
-        { icon: "github", label: "GitHub", href: "https://github.com/milzamsz/astro-cloudflare-starter" },
+        {
+          icon: "github",
+          label: "GitHub",
+          href: "https://github.com/milzamsz/astro-cloudflare-starter",
+        },
       ],
       sidebar: [
         {
@@ -138,23 +149,41 @@ export default defineConfig({
           items: [
             { label: "Overview", slug: "docs/getting-started/overview" },
             { label: "Quick Start", slug: "docs/getting-started/quick-start" },
-            { label: "Project Structure", slug: "docs/getting-started/project-structure" },
+            {
+              label: "Project Structure",
+              slug: "docs/getting-started/project-structure",
+            },
           ],
         },
         {
           label: "Guides",
           items: [
-            { label: "Content Management", slug: "docs/guides/content-management" },
-            { label: "Internationalization", slug: "docs/guides/internationalization" },
+            {
+              label: "Content Management",
+              slug: "docs/guides/content-management",
+            },
+            {
+              label: "Internationalization",
+              slug: "docs/guides/internationalization",
+            },
             { label: "Customization", slug: "docs/guides/customization" },
-            { label: "AI-assisted development", slug: "docs/guides/ai-assisted-development" },
+            {
+              label: "AI-assisted development",
+              slug: "docs/guides/ai-assisted-development",
+            },
           ],
         },
         {
           label: "Deployment",
           items: [
-            { label: "Cloudflare Pages", slug: "docs/deployment/cloudflare-pages" },
-            { label: "Environment Variables", slug: "docs/deployment/environment-variables" },
+            {
+              label: "Cloudflare Pages",
+              slug: "docs/deployment/cloudflare-pages",
+            },
+            {
+              label: "Environment Variables",
+              slug: "docs/deployment/environment-variables",
+            },
           ],
         },
       ],
@@ -162,6 +191,7 @@ export default defineConfig({
     mdx(),
     contentValidationIntegration(),
     sitemap({
+      filter: (page) => !page.endsWith("/404") && !page.endsWith("/404/"),
       i18n: {
         defaultLocale: "en",
         locales: {
@@ -175,13 +205,42 @@ export default defineConfig({
 
   env: {
     schema: {
-      SITE_URL: envField.string({ context: "server", access: "public", default: "http://localhost:4321" }),
-      GOOGLE_SITE_VERIFICATION: envField.string({ context: "server", access: "public", optional: true }),
-      BING_SITE_VERIFICATION: envField.string({ context: "server", access: "public", optional: true }),
-      PUBLIC_GA_MEASUREMENT_ID: envField.string({ context: "client", access: "public", optional: true }),
-      PUBLIC_GTM_ID: envField.string({ context: "client", access: "public", optional: true }),
-      PUBLIC_CONSENT_ENABLED: envField.boolean({ context: "client", access: "public", optional: true, default: false }),
-      PUBLIC_PRIVACY_POLICY_URL: envField.string({ context: "client", access: "public", optional: true }),
+      SITE_URL: envField.string({
+        context: "server",
+        access: "public",
+        default: "http://localhost:4321",
+      }),
+      GOOGLE_SITE_VERIFICATION: envField.string({
+        context: "server",
+        access: "public",
+        optional: true,
+      }),
+      BING_SITE_VERIFICATION: envField.string({
+        context: "server",
+        access: "public",
+        optional: true,
+      }),
+      PUBLIC_GA_MEASUREMENT_ID: envField.string({
+        context: "client",
+        access: "public",
+        optional: true,
+      }),
+      PUBLIC_GTM_ID: envField.string({
+        context: "client",
+        access: "public",
+        optional: true,
+      }),
+      PUBLIC_CONSENT_ENABLED: envField.boolean({
+        context: "client",
+        access: "public",
+        optional: true,
+        default: false,
+      }),
+      PUBLIC_PRIVACY_POLICY_URL: envField.string({
+        context: "client",
+        access: "public",
+        optional: true,
+      }),
     },
   },
 
@@ -209,5 +268,5 @@ export default defineConfig({
   },
 
   adapter: vercel(),
-  output: 'server'
+  output: "server",
 });
