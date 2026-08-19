@@ -111,6 +111,7 @@ function contentValidationIntegration() {
 
 export default defineConfig({
   site: siteConfig.url,
+  trailingSlash: 'always',
 
   i18n: {
     defaultLocale: "en",

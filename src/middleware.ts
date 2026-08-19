@@ -2,9 +2,9 @@ import { defineMiddleware } from "astro:middleware";
 
 const ALLOWED_PATHS = new Set<string>([
   "/",
-  "/404",
-  "/privacy",
-  "/terms",
+  "/404/",
+  "/privacy/",
+  "/terms/",
   "/favicon.ico",
   "/robots.txt",
   "/sitemap-index.xml",
@@ -22,5 +22,5 @@ export const onRequest = defineMiddleware(async (context, next) => {
   ) {
     return next();
   }
-  return context.redirect("/404", 302);
+  return context.redirect("/404/", 302);
 });
