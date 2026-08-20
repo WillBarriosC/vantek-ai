@@ -142,6 +142,7 @@ const stack = defineCollection({
   }),
   schema: z.object({
     name: z.string(),
+    step: z.string(),
     description: z.string(),
     version: z.string(),
     url: z.string().url(),

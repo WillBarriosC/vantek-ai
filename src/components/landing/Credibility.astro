@@ -92,9 +92,9 @@ const { stats = [], testimonials = [], logos = [] } = Astro.props as Props;
     grid-template-columns: 1fr;
   }
 
-  @media (min-width: 640px) {
+  @media (max-width: 768px) {
     .credibility__stats {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr;
     }
   }
 

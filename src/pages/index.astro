@@ -77,17 +77,21 @@ const tabs = [
         Everything you need to ship a fast marketing site.
       </p>
     </header>
-    <FeatureTabs client:visible tabs={tabs} />
+    <FeatureTabs tabs={tabs} />
   </section>
 
   <section id="como-lo-hacemos" class="container py-16">
     <header class="section-head">
+      <p class="section-head__eyebrow">Why this stack</p>
       <h2 class="section-head__title">Como lo hacemos</h2>
+      <p class="section-head__lead">
+        Everything you need to ship a fast marketing site.
+      </p>
     </header>
     <StackMarquee items={stackEntries} />
   </section>
 
-  <section class="container py-16">
+  <section class="container py-10">
     <Credibility
       stats={[
         { value: "15 días", label: "Entrega del Hito 1" },
